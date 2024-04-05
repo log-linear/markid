@@ -115,8 +115,11 @@ function M.init()
             end,
             is_supported = function(lang)
                 local queries = configs.get_module("markid").queries
-                return pcall(vim.treesitter.query.parse, lang, queries[lang] or queries["default"])
-            end,
+                if vim.treesitter.query.get(lang, 'markid') then
+                    return true
+                else
+                    return pcall(vim.treesitter.query.parse, lang, queries[lang] or queries['default'])
+                end
             colors = M.colors.medium,
             queries = M.queries
         }
